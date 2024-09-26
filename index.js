@@ -1,12 +1,11 @@
 const navLinks = [
-    { id: 1, name: 'Accueil', href: '#home' },
-    { id: 2, name: 'Cubes', href: 'cube' },
+    { id: 1, name: '', href: '' },
+    { id: 2, name: 'Cubes', href: 'comps/cube.php' },
     { id: 3, name: 'Chronomètre', href: 'chrono' },
     { id: 4, name: 'Solution', href: 'solution' },
     { id: 5, name: 'Présentation', href: 'presentation' },
     { id: 6, name: 'Connexion', href: 'admin/login.php' },
 ];
-
 
 function createNavItems() {
     const ul = document.createElement('ul');
@@ -46,20 +45,5 @@ toggleButton.addEventListener('click', () => {
     toggleIcon.src = estOuvert ? 'assets/close.svg' : 'assets/menu.svg';
 });
 
-// Récupération du contenu HTML de la page d'accueil de la WCA
+// Récupération d'une liste de compétitions via l'API de la WCA
 const section = document.getElementById('section');
-
-fetch('https://www.worldcubeassociation.org/')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.text();
-    })
-    .then(html => {
-        // Affichage du contenu dans la section
-        section.innerHTML = html; // Remplace le contenu de la section par le HTML récupéré
-    })
-    .catch(error => {
-        console.error('Une erreur est survenue :', error);
-    });
