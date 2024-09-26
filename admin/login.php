@@ -1,12 +1,12 @@
 <?php
-
+session_start();
 include("config.php");
 
 $message = '';
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
     $sql = "SELECT * FROM users WHERE username = :username";
     $stmt = $pdo->prepare($sql);
@@ -14,14 +14,26 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $user = $stmt->fetch();
 
     if ($user && password_verify($password, $user['password'])) {
-        session_start();
         $_SESSION['user_id'] = $user['id'];
-        header('Location: dashboard.php');
+        $_SESSION['username'] = $user['username'];
+
+
+        $token = bin2hex(random_bytes(32));
+        setcookie('auth_token', $token, time() + (86400 * 30), "/", "", true, true);
+
+        $sql = "UPDATE users SET token = :token WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['token' => $token, 'id' => $user['id']]);
+
+        header('Location: ../index.php');
+        exit();
     } else {
         $message = 'Mauvais identifiants';
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="fr">

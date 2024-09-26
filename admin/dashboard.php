@@ -48,10 +48,12 @@ if (!isset($_SESSION['user_id'])) {
 <body>
 
 <div class="dashboard-container">
+    <a href="../index.php">Retourner à l'accueil</a>
     <h2>Bienvenue sur votre tableau de bord</h2>
     <p>Vous pouvez maintenant accéder à toutes les fonctionnalités réservées à nos utilisateurs inscrits.</p>
     <a href="logout.php">Se déconnecter</a>
 </div>
+
 
 </body>
 </html>

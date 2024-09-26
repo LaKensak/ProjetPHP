@@ -3,9 +3,8 @@ $host = 'localhost';
 $db   = 'speedcubing';
 $user = 'root';
 $pass = '';
-$charset = 'utf8';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$dsn = "mysql:host=$host;dbname=$db;user=$user;password=$pass;";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
