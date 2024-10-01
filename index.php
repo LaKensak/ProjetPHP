@@ -41,7 +41,7 @@ $welcomeMessage = $userId ? "Bienvenue, " . htmlspecialchars($username) : "Conne
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CUBE</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"/>
-    <link rel="stylesheet" href="assets/index-CTDMGqk2.css">
+    <link rel="stylesheet" href="/assets/index-CTDMGqk2.css">
     <script src="assets/index-Dr3JfuGf.js" defer></script>
     <script src="assets/hls-sFmj3BG-.js" defer></script>
     <script src="https://unpkg.com/@ungap/custom-elements-builtin"></script>
@@ -81,7 +81,7 @@ $welcomeMessage = $userId ? "Bienvenue, " . htmlspecialchars($username) : "Conne
     const navLinks = [
         { id: 1, name: '', href: '' },
         { id: 2, name: 'Cubes', href: 'comps/cube.php' },
-        { id: 3, name: 'Chronomètre', href: 'chrono' },
+        { id: 3, name: 'Chronomètre', href: 'comps/chrono.php' },
         { id: 4, name: 'Solution', href: 'solution' },
         { id: 5, name: 'Présentation', href: 'presentation' },
         { id: 6, name: userId ? `Bienvenue, ${username}` : 'Connexion', href: userId ? 'admin/dashboard.php' : 'admin/login.php' }, // Mettre à jour le href si connecté
