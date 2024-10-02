@@ -1,15 +1,17 @@
 <?php
 session_start();
-include("admin/config.php"); // Assurez-vous que la connexion à la base de données est incluse
+include("admin/config.php"); // Connexion à la base de données
 
 // Variable pour stocker le message de bienvenue
 $userId = null;
 $username = null;
+$isAdmin = false; // Nouveau drapeau pour vérifier si l'utilisateur est un admin
 
 if (isset($_SESSION['user_id'])) {
     // L'utilisateur est connecté via session
     $userId = $_SESSION['user_id'];
-    $username = $_SESSION['username']; // Assurez-vous que le nom d'utilisateur est stocké dans la session
+    $username = $_SESSION['username'];
+    $isAdmin = $_SESSION['role'] === 'admin'; // Vérifiez si le rôle est administrateur
 } elseif (isset($_COOKIE['auth_token'])) {
     // Vérifier le token comme expliqué précédemment
     $token = $_COOKIE['auth_token'];
@@ -21,17 +23,23 @@ if (isset($_SESSION['user_id'])) {
 
     if ($user) {
         $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username']; // Stocker le nom d'utilisateur
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['role'] = $user['role']; // Stocker le rôle dans la session
         $userId = $user['id'];
         $username = $user['username'];
+        $isAdmin = $user['role'] === 'admin'; // Vérifiez si le rôle est administrateur
     } else {
         setcookie('auth_token', '', time() - 3600, "/", "", true, true);
     }
 }
 
+if ($isAdmin){
+    header('Location: admin/dashboardadmin.php');
+    exit();
+}
+
 // Création du message de bienvenue
 $welcomeMessage = $userId ? "Bienvenue, " . htmlspecialchars($username) : "Connexion";
-
 ?>
 
 <!DOCTYPE html>
@@ -77,13 +85,16 @@ $welcomeMessage = $userId ? "Bienvenue, " . htmlspecialchars($username) : "Conne
 <script>
     const userId = <?php echo json_encode($userId); ?>; // ID de l'utilisateur pour JS
     const username = <?php echo json_encode($username); ?>; // Nom de l'utilisateur pour JS
+    const isAdmin = <?php echo json_encode($isAdmin); ?>;
 
     const navLinks = [
         { id: 1, name: '', href: '' },
         { id: 2, name: 'Cubes', href: 'comps/cube.php' },
         { id: 3, name: 'Solution', href: 'solution' },
-        { id: 4, name: 'Présentation', href: 'presentation' },
-        { id: 5, name: userId ? `Bienvenue, ${username}` : 'Connexion', href: userId ? 'admin/dashboard.php' : 'admin/login.php' }, // Mettre à jour le href si connecté
+        { id: 4, name: 'Présentation', href: 'comps/presentation.php' },
+        { id: 5, name : 'Dashboard', href: isAdmin ? 'admin/dashboard.php' : 'admin/dashboardadmin.php'},
+        { id: 6, name: userId ? `Bienvenue, ${username}` : 'Connexion', href: isAdmin ? '' : ( userId ? 'admin/dashboard.php' : 'admin/login.php')
+        },
     ];
 
     function createNavItems() {

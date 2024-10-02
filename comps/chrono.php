@@ -1,7 +1,7 @@
 <?php
 session_start();
 include("../admin/config.php");
-
+include "cube&chrono.php";
 
 $userId = null;
 $username = null;
@@ -41,13 +41,14 @@ if (isset($_POST['chrono']) && isset($_POST['id'])) {
     exit;
 }
 
-include "cube&chrono.php";
+
 
 $cubeId = $_GET['id'] ?? null; // Récupère l'ID du cube
 if ($cubeId === null) {
     echo "Cube ID manquant !";
     exit;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -89,6 +90,11 @@ if ($cubeId === null) {
             <button onclick="SetStop()"> ❚❚</button>
             <button onclick="Reset()"> ⟳</button>
             <button onclick="getChronoInfo()" class="text-white font-bold py-1 px-2 rounded">Envoyer</button>
+        </div>
+        <div>
+            <h1 class="text-white-800" id="tmps">Meilleur temps</h1>
+            <div id="temps" class="text-white"></div>
+            <div id="previousScores" class="text-white"></div>
         </div>
     </div>
     <script type="text/javascript">
@@ -140,22 +146,22 @@ if ($cubeId === null) {
             const cubeId = urlParams.get('id');
             return cubeId;
         }
-
+        let scoresHistory = [];
         const getChronoInfo = () => {
             const min = Math.floor(seconds / 60);
             const sec = seconds % 60;
-
             const info = {
-                minutes: min,
-                seconds: sec,
-                milliseconds: milliseconds,
                 format: `00:${min < 10 ? "0" + min : min}:${sec < 10 ? "0" + sec : sec}.${milliseconds < 100 ? (milliseconds < 10 ? "00" + milliseconds : "0" + milliseconds) : milliseconds}`
             };
 
-            console.log(info); // Affiche les informations dans la console
+            scoresHistory.push(info.format);
+            if (scoresHistory.length > 5) {
+                scoresHistory.shift();
+            }
+            historyDiv.innerHTML = scoresHistory.join('<br>');
 
             const chronoData = info.format;
-            const cubeId = getCubeId(); // Utilise la fonction pour obtenir l'ID du cube
+            const cubeId = getCubeId();
             const userId = <?php echo json_encode(isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null); ?>;
 
             if (userId && cubeId) {
@@ -165,16 +171,17 @@ if ($cubeId === null) {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
                     body: new URLSearchParams({
-                        'chrono': chronoData, // Envoyer les informations du chrono
-                        'cubeId': cubeId, // Envoyer l'ID du cube
-                        'userId': userId // Envoyer l'ID de l'utilisateur
+                        'chrono': chronoData,
+                        'cubeId': cubeId,
+                        'userId': userId,
+                        'bestscores': JSON.stringify(scoresHistory) // Correctly send best scores
                     })
                 })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
                             alert('Le chrono a été enregistré avec succès pour l\'utilisateur et le cube: ' + getCubeId());
-                            console.log('Le chrono a été enregistré avec succès pour l\'utilisateur ID:', <?php echo json_encode(isset($_SESSION['username']) ? $_SESSION['username'] : null); ?>, 'et nom du cube:', getCubeId());
+                            displayTopTimes(data.top_times); // Display top times returned from server
                         } else {
                             console.error('Erreur de mise à jour du chrono pour l\'utilisateur ID:', <?php echo json_encode(isset($_SESSION['username']) ? $_SESSION['username'] : null); ?>);
                         }
@@ -200,7 +207,7 @@ if ($cubeId === null) {
         {id: 2, name: 'Cubes', href: 'cube.php'},
         {id: 3, name: 'Chronomètre', href: 'chrono.php'},
         {id: 4, name: 'Solution', href: 'solution'},
-        {id: 5, name: 'Présentation', href: 'presentation'},
+        {id: 5, name: 'Présentation', href: 'presentation.php'},
         {
             id: 6,
             name: userId ? `Bienvenue, ${username}` : 'Connexion',

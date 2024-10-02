@@ -14,6 +14,7 @@ session_start();
     <script src="../assets/index-Dr3JfuGf.js" defer></script>
     <script src="../assets/hls-sFmj3BG-.js" defer></script>
     <script src="https://unpkg.com/@ungap/custom-elements-builtin"></script>
+    <script type="module" src="../x-frame-bypass.js"></script>
 </head>
 <body>
 <header class="fixed top-0 left-0 right-0 z-50 bg-black/90" id="#home">
@@ -45,7 +46,7 @@ session_start();
         {id: 2, name: 'Cubes', href: 'cube.php'},
         {id: 3, name: 'Chronomètre', href: 'chrono.php'},
         {id: 4, name: 'Solution', href: 'solution.php'},
-        {id: 5, name: 'Présentation', href: 'presentation'},
+        {id: 5, name: 'Présentation', href: 'presentation.php'},
         {
             id: 6,
             name: userId ? `Bienvenue, ${username}` : 'Connexion',

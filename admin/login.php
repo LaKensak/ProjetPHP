@@ -17,7 +17,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
 
-
+        // Génération et stockage du token dans le cookie
         $token = bin2hex(random_bytes(32));
         setcookie('auth_token', $token, time() + (86400 * 30), "/", "", true, true);
 
@@ -25,10 +25,13 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['token' => $token, 'id' => $user['id']]);
 
-        header('Location: ../index.php');
+        // Rediriger selon le rôle
+        if ($user['role'] === 'admin') {
+            header('Location: ../admin/dashboardadmin.php');
+        } else {
+            header('Location: ../index.php');
+        }
         exit();
-    } else {
-        $message = 'Mauvais identifiants';
     }
 }
 ?>
