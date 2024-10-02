@@ -138,7 +138,6 @@ if ($cubeId === null) {
         function getCubeId() {
             const urlParams = new URLSearchParams(window.location.search);
             const cubeId = urlParams.get('id');
-            console.log("Nom du Cube:", cubeId);
             return cubeId;
         }
 
@@ -174,10 +173,10 @@ if ($cubeId === null) {
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert('Le chrono a été enregistré avec succès pour l\'utilisateur et le cube: ' + data.cubeId);
-                            console.log('Le chrono a été enregistré avec succès pour l\'utilisateur ID:', data.userId, 'et nom du cube:', data.cubeId);
+                            alert('Le chrono a été enregistré avec succès pour l\'utilisateur et le cube: ' + getCubeId());
+                            console.log('Le chrono a été enregistré avec succès pour l\'utilisateur ID:', <?php echo json_encode(isset($_SESSION['username']) ? $_SESSION['username'] : null); ?>, 'et nom du cube:', getCubeId());
                         } else {
-                            console.error('Erreur de mise à jour du chrono pour l\'utilisateur ID:', data.userId);
+                            console.error('Erreur de mise à jour du chrono pour l\'utilisateur ID:', <?php echo json_encode(isset($_SESSION['username']) ? $_SESSION['username'] : null); ?>);
                         }
                     })
                     .catch(error => {
@@ -205,7 +204,7 @@ if ($cubeId === null) {
         {
             id: 6,
             name: userId ? `Bienvenue, ${username}` : 'Connexion',
-            href: userId ? 'admin/dashboard.php' : 'admin/login.php'
+            href: userId ? '../admin/dashboard.php' : '../admin/login.php'
         },
     ];
 

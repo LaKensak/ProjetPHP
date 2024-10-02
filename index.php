@@ -81,10 +81,9 @@ $welcomeMessage = $userId ? "Bienvenue, " . htmlspecialchars($username) : "Conne
     const navLinks = [
         { id: 1, name: '', href: '' },
         { id: 2, name: 'Cubes', href: 'comps/cube.php' },
-        { id: 3, name: 'Chronomètre', href: 'comps/chrono.php' },
-        { id: 4, name: 'Solution', href: 'solution' },
-        { id: 5, name: 'Présentation', href: 'presentation' },
-        { id: 6, name: userId ? `Bienvenue, ${username}` : 'Connexion', href: userId ? 'admin/dashboard.php' : 'admin/login.php' }, // Mettre à jour le href si connecté
+        { id: 3, name: 'Solution', href: 'solution' },
+        { id: 4, name: 'Présentation', href: 'presentation' },
+        { id: 5, name: userId ? `Bienvenue, ${username}` : 'Connexion', href: userId ? 'admin/dashboard.php' : 'admin/login.php' }, // Mettre à jour le href si connecté
     ];
 
     function createNavItems() {
